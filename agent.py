@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import re
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from browser_use import Agent, Browser, BrowserConfig
@@ -27,25 +28,49 @@ agent = Agent(
     task="""Navigate to linkedin.com, collect the first 5 profiles from my connections, extract name and profile_url, 
             and export results as JSON""",
     llm=llm,
-    browser=browser
+    browser=browser,
+    save_conversation_path="logs/conversation"
 )
 
-
 async def main():
-    history = await agent.run()  # Run the agent and store history
+    history = await agent.run()
+    try:
+        # Direct extraction from controller output
+        extracted = history.extracted_content()
+        if extracted:
+            # Clean markdown and parse last valid JSON
+            for entry in reversed(extracted):
+                clean_entry = re.sub(r'^```json\n|\n```$', '', entry).strip()
+                try:
+                    data = json.loads(clean_entry)
+                    if isinstance(data, list):
+                        with open("linkedin_connections.json", "w") as f:
+                            json.dump(data[:5], f, indent=2)
+                        print("Saved from extracted content!")
+                        return
+                except json.JSONDecodeError:
+                    continue
 
-    # Extract the final result
-    extracted_data = history.final_result()
+        # Parse final result
+        result_text = history.final_result()
+        if result_text:
+            # Extract JSON array and fix escaped quotes
+            json_str = result_text.split(":\n")[-1].replace('\\"', '"')
+            try:
+                data = json.loads(json_str)
+                with open("linkedin_connections.json", "w") as f:
+                    json.dump(data, f, indent=2)
+                print("Saved from final result!")
+                return
+            except json.JSONDecodeError:
+                pass
 
-    # Save the result as a JSON file
-    json_file_path = "linkedin_connections.json"
-    with open(json_file_path, "w", encoding="utf-8") as json_file:
-        json.dump(extracted_data, json_file, indent=4)
-
-    print(f"Extracted data saved to {json_file_path}")
-
-    input('Press Enter to close the browser...')
-    await browser.close()
-
+        print("No valid JSON found in history")
+        
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        await browser.close()
+        
 if __name__ == '__main__':
     asyncio.run(main())
