@@ -25,10 +25,11 @@ llm = ChatGoogleGenerativeAI(model='gemini-2.0-flash-exp', api_key=SecretStr(api
 
 # Define agent
 agent = Agent(
-    task="""Navigate to linkedin.com, collect the first 5 profiles from my connections, extract name and profile_url, 
+    task="""Navigate to linkedin.com, collect the first 20 profiles from my connections, extract name and profile_url, 
             and export results as JSON""",
     llm=llm,
     browser=browser,
+    generate_gif=True,
     save_conversation_path="logs/conversation"
 )
 
