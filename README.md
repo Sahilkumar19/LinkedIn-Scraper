@@ -2,6 +2,8 @@
 
 This project uses `browser-use` — an LLM-powered browser automation library — to scrape LinkedIn connections and extract structured profile data such as names and URLs. It combines browser control, language models, memory handling, and persistent sessions to collect data from dynamically rendered web pages.
 
+---
+
 ## ⚙️ Technical Specs
 
 ### 🧠 High-Level Design
@@ -23,16 +25,16 @@ This project uses `browser-use` — an LLM-powered browser automation library �
 - `python-dotenv`
 - `asyncio`, `re`, `json`, `os`
 
+---
+
 ## 🚀 Setup & Usage
 
 ### 1️⃣ Clone the Repo
 
 ```bash
-git clone https://github.com/Sahilkumar19/LinkedIn-Scraper.git
+git clone https://github.com/yourusername/LinkedIn-Scraper.git
 cd LinkedIn-Scraper
 ```
-
-````
 
 ### 2️⃣ Setup Python Environment using `uv`
 
@@ -63,6 +65,8 @@ uv pip install -r requirements.txt
 Create a `.env` file in the project root with the following:
 
 ```env
+LINKEDIN_EMAIL=your_email@example.com
+LINKEDIN_PASSWORD=your_password
 GEMINI_API_KEY=your_google_generative_ai_key
 ```
 
@@ -79,12 +83,12 @@ After running the script, you'll get a `linkedin_connections.json` file like:
 ```json
 [
   {
-    "name": "user-1",
-    "profile_url": "https://www.linkedin.com/in/user-1/"
+    "name": "John Doe",
+    "profile_url": "https://www.linkedin.com/in/john-doe/"
   },
   {
-    "name": "user-2",
-    "profile_url": "https://www.linkedin.com/in/user-2/"
+    "name": "Jane Smith",
+    "profile_url": "https://www.linkedin.com/in/jane-smith/"
   }
 ]
 ```
@@ -95,8 +99,8 @@ After running the script, you'll get a `linkedin_connections.json` file like:
 
 ### 🧱 Challenges Faced
 
-- **LinkedIn Anti-Scraping**: LinkedIn uses bot-detection techniques and requires login. Solved this by connecting to my existing Chrome installation to access saved states and cookies.
-- **Dynamic Content Loading**: LinkedIn loads data asynchronously, so I added `wait_for_network_idle_page_load_time` to ensure full page load before DOM interaction.
+- **LinkedIn Anti-Scraping**: LinkedIn uses bot-detection techniques and requires login. Solved this by using `PersistentBrowser` sessions and performing login only once.
+- **Dynamic Content Loading**: LinkedIn loads data asynchronously, so we added `wait_for_network_idle_page_load_time` to ensure full page load before DOM interaction.
 - **Context Limitations**: LLMs have limited memory. We truncated the DOM to the most relevant interactive elements and reset memory every 5 steps.
 - **Loop Prevention**: Set max iteration safeguards and tracked redundant actions to detect when the agent gets stuck.
 - **Headless vs Headed Mode**: During debugging, headed mode (`highlight_elements=True`) helped visualize the agent’s behavior.
@@ -127,4 +131,8 @@ Feel free to open issues or submit pull requests for improving scraping logic, o
 ## 📄 License
 
 This project is licensed under the MIT License.
-````
+
+```
+
+Let me know if you'd like this as a downloadable file or want me to auto-generate it in your repo structure!
+```
