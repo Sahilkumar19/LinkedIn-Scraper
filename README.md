@@ -32,7 +32,7 @@ This project uses `browser-use` — an LLM-powered browser automation library �
 ### 1️⃣ Clone the Repo
 
 ```bash
-git clone https://github.com/yourusername/LinkedIn-Scraper.git
+git clone https://github.com/Sahilkumar19/LinkedIn-Scraper.git
 cd LinkedIn-Scraper
 ```
 
@@ -65,8 +65,6 @@ uv pip install -r requirements.txt
 Create a `.env` file in the project root with the following:
 
 ```env
-LINKEDIN_EMAIL=your_email@example.com
-LINKEDIN_PASSWORD=your_password
 GEMINI_API_KEY=your_google_generative_ai_key
 ```
 
@@ -83,12 +81,12 @@ After running the script, you'll get a `linkedin_connections.json` file like:
 ```json
 [
   {
-    "name": "John Doe",
-    "profile_url": "https://www.linkedin.com/in/john-doe/"
+    "name": "user1",
+    "profile_url": "https://www.linkedin.com/in/user-1/"
   },
   {
-    "name": "Jane Smith",
-    "profile_url": "https://www.linkedin.com/in/jane-smith/"
+    "name": "user2",
+    "profile_url": "https://www.linkedin.com/in/user-2/"
   }
 ]
 ```
@@ -99,7 +97,7 @@ After running the script, you'll get a `linkedin_connections.json` file like:
 
 ### 🧱 Challenges Faced
 
-- **LinkedIn Anti-Scraping**: LinkedIn uses bot-detection techniques and requires login. Solved this by using `PersistentBrowser` sessions and performing login only once.
+- **LinkedIn Anti-Scraping**: LinkedIn uses bot-detection techniques and requires login. Solved this by connecting to my existing Chrome installation to access saved states and cookies.
 - **Dynamic Content Loading**: LinkedIn loads data asynchronously, so we added `wait_for_network_idle_page_load_time` to ensure full page load before DOM interaction.
 - **Context Limitations**: LLMs have limited memory. We truncated the DOM to the most relevant interactive elements and reset memory every 5 steps.
 - **Loop Prevention**: Set max iteration safeguards and tracked redundant actions to detect when the agent gets stuck.
