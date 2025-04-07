@@ -98,6 +98,7 @@ After running the script, you'll get a `linkedin_connections.json` file like:
 ### 🧱 Challenges Faced
 
 - **LinkedIn Anti-Scraping**: LinkedIn uses bot-detection techniques and requires login. Solved this by connecting to my existing Chrome installation to access saved states and cookies.
+- **OpenAI API Key Limits**: The agent was unable to complete a single task using the free tier of the OpenAI API. Therefore, I switched to Google's Gemini API, which is free to use and provided better performance for this project.
 - **Dynamic Content Loading**: LinkedIn loads data asynchronously, so we added `wait_for_network_idle_page_load_time` to ensure full page load before DOM interaction.
 - **Context Limitations**: LLMs have limited memory. We truncated the DOM to the most relevant interactive elements and reset memory every 5 steps.
 - **Loop Prevention**: Set max iteration safeguards and tracked redundant actions to detect when the agent gets stuck.
@@ -129,8 +130,3 @@ Feel free to open issues or submit pull requests for improving scraping logic, o
 ## 📄 License
 
 This project is licensed under the MIT License.
-
-```
-
-Let me know if you'd like this as a downloadable file or want me to auto-generate it in your repo structure!
-```
