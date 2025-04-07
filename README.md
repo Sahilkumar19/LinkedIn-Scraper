@@ -121,6 +121,16 @@ After running the script, you'll get a `linkedin_connections.json` file like:
 
 ---
 
+## 🌐 Deployment & Demo
+
+Since this is a command-line automation project, it is not hosted as a web app.  
+You can view and run the code using the following resources:
+
+- 🔗 **GitHub Repository:** [https://github.com/Sahilkumar19/LinkedIn-Scraper](https://github.com/Sahilkumar19/LinkedIn-Scraper)
+- 🎥 **Demo Video (Execution Walkthrough):** [Watch here](https://drive.google.com/file/d/1DEaMZByBoN7HfBgG5x4ufItCqDWKcxFd/view?usp=sharing)
+- 🖼️ **Execution GIF:**  
+  ![Agent Run](./agent_history.gif)
+
 ## 🙋‍♂️ Contributions
 
 Feel free to open issues or submit pull requests for improving scraping logic, optimizing memory usage, or adding other platforms.
