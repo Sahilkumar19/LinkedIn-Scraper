@@ -1,9 +1,6 @@
-````markdown
 # 🔍 LinkedIn-Scraper
 
 This project uses `browser-use` — an LLM-powered browser automation library — to scrape LinkedIn connections and extract structured profile data such as names and URLs. It combines browser control, language models, memory handling, and persistent sessions to collect data from dynamically rendered web pages.
-
----
 
 ## ⚙️ Technical Specs
 
@@ -26,8 +23,6 @@ This project uses `browser-use` — an LLM-powered browser automation library �
 - `python-dotenv`
 - `asyncio`, `re`, `json`, `os`
 
----
-
 ## 🚀 Setup & Usage
 
 ### 1️⃣ Clone the Repo
@@ -36,6 +31,7 @@ This project uses `browser-use` — an LLM-powered browser automation library �
 git clone https://github.com/Sahilkumar19/LinkedIn-Scraper.git
 cd LinkedIn-Scraper
 ```
+
 ````
 
 ### 2️⃣ Setup Python Environment using `uv`
@@ -131,7 +127,4 @@ Feel free to open issues or submit pull requests for improving scraping logic, o
 ## 📄 License
 
 This project is licensed under the MIT License.
-
-```
-
-```
+````
