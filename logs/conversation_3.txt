@@ -1,0 +1,251 @@
+ SystemMessage 
+You are an AI agent designed to automate browser tasks. Your goal is to accomplish the ultimate task following the rules.
+
+# Input Format
+Task
+Previous steps
+Current URL
+Open Tabs
+Interactive Elements
+[index]<type>text</type>
+- index: Numeric identifier for interaction
+- type: HTML element type (button, input, etc.)
+- text: Element description
+Example:
+[33]<button>Submit Form</button>
+
+- Only elements with numeric indexes in [] are interactive
+- elements without [] provide only context
+
+# Response Rules
+1. RESPONSE FORMAT: You must ALWAYS respond with valid JSON in this exact format:
+{"current_state": {"evaluation_previous_goal": "Success|Failed|Unknown - Analyze the current elements and the image to check if the previous goals/actions are successful like intended by the task. Mention if something unexpected happened. Shortly state why/why not",
+"memory": "Description of what has been done and what you need to remember. Be very specific. Count here ALWAYS how many times you have done something and how many remain. E.g. 0 out of 10 websites analyzed. Continue with abc and xyz",
+"next_goal": "What needs to be done with the next immediate action"},
+"action":[{"one_action_name": {// action-specific parameter}}, // ... more actions in sequence]}
+
+2. ACTIONS: You can specify multiple actions in the list to be executed in sequence. But always specify only one action name per item. Use maximum {max_actions} actions per sequence.
+Common action sequences:
+- Form filling: [{"input_text": {"index": 1, "text": "username"}}, {"input_text": {"index": 2, "text": "password"}}, {"click_element": {"index": 3}}]
+- Navigation and extraction: [{"go_to_url": {"url": "https://example.com"}}, {"extract_content": {"goal": "extract the names"}}]
+- Actions are executed in the given order
+- If the page changes after an action, the sequence is interrupted and you get the new state.
+- Only provide the action sequence until an action which changes the page state significantly.
+- Try to be efficient, e.g. fill forms at once, or chain actions where nothing changes on the page
+- only use multiple actions if it makes sense.
+
+3. ELEMENT INTERACTION:
+- Only use indexes of the interactive elements
+- Elements marked with "[]Non-interactive text" are non-interactive
+
+4. NAVIGATION & ERROR HANDLING:
+- If no suitable elements exist, use other functions to complete the task
+- If stuck, try alternative approaches - like going back to a previous page, new search, new tab etc.
+- Handle popups/cookies by accepting or closing them
+- Use scroll to find elements you are looking for
+- If you want to research something, open a new tab instead of using the current tab
+- If captcha pops up, try to solve it - else try a different approach
+- If the page is not fully loaded, use wait action
+
+5. TASK COMPLETION:
+- Use the done action as the last action as soon as the ultimate task is complete
+- Dont use "done" before you are done with everything the user asked you, except you reach the last step of max_steps. 
+- If you reach your last step, use the done action even if the task is not fully finished. Provide all the information you have gathered so far. If the ultimate task is completly finished set success to true. If not everything the user asked for is completed set success in done to false!
+- If you have to do something repeatedly for example the task says for "each", or "for all", or "x times", count always inside "memory" how many times you have done it and how many remain. Don't stop until you have completed like the task asked you. Only call done after the last step.
+- Don't hallucinate actions
+- Make sure you include everything you found out for the ultimate task in the done text parameter. Do not just say you are done, but include the requested information of the task. 
+
+6. VISUAL CONTEXT:
+- When an image is provided, use it to understand the page layout
+- Bounding boxes with labels on their top right corner correspond to element indexes
+
+7. Form filling:
+- If you fill an input field and your action sequence is interrupted, most often something changed e.g. suggestions popped up under the field.
+
+8. Long tasks:
+- Keep track of the status and subresults in the memory. 
+
+9. Extraction:
+- If your task is to find information - call extract_content on the specific pages to get and store the information.
+Your responses must be always JSON with the specified format.
+
+ HumanMessage 
+Your ultimate task is: """Navigate to linkedin.com, collect the first 20 profiles from my connections, extract name and profile_url, 
+            and export results as JSON""". If you achieved your ultimate task, stop everything and use the done action in the next step to complete the task. If not, continue as usual.
+
+ HumanMessage 
+Example output:
+
+ AIMessage 
+
+
+ ToolMessage 
+Browser started
+
+ HumanMessage 
+[Your task history memory starts here]
+
+ AIMessage 
+
+
+ ToolMessage 
+
+
+ HumanMessage 
+Action result: 🔗  Navigated to https://www.linkedin.com
+
+ HumanMessage 
+[Task history memory ends]
+[Current state starts here]
+The following is one-time information - if you need to remember it write it to memory:
+Current url: https://www.linkedin.com/feed/
+Available tabs:
+[TabInfo(page_id=0, url='https://www.linkedin.com/feed/', title='Feed | LinkedIn')]
+Interactive elements from top layer of the current page inside the viewport:
+[Start of page]
+0 notifications total
+[0]<a />
+[1]<button Click to start a search>Search/>
+[2]<a Home/>
+[3]<a My Network/>
+[4]<a Jobs/>
+[5]<a Messaging/>
+[6]<a Notifications/>
+[7]<button false>Me/>
+[8]<img />
+[9]<button false>For Business/>
+[10]<a Try Premium for ₹0/>
+[11]<a Background photo of Sahil Kumar />
+[12]<a />
+[13]<img />
+[14]<a Sahil Kumar
+Junior at Sitare University | Ex-Intern at Moglix
+Lucknow, Uttar Pradesh/>
+[15]<a Sitare University/>
+[16]<img />
+[17]<a Profile viewers
+42/>
+[18]<a Post impressions
+7/>
+[19]<a Get 4x more profile views with Premium
+Try for ₹0/>
+[20]<a Saved items/>
+[21]<a Groups/>
+[22]<a Newsletters/>
+[23]<a Events/>
+[24]<a />
+[25]<img />
+[26]<button Start a post/>
+[27]<button Add a photo>Photo/>
+[28]<button Add a video>Video/>
+[29]<a Write an article on LinkedIn>Write article/>
+[30]<button radio>All/>
+[31]<button radio>In my network/>
+[32]<button false>Sort by:
+Top/>
+feed updates
+Feed post number 1
+[33]<a Niku Raj/>
+[34]<img />
+[35]<img />
+[36]<a Niku Raj/>
+,
+[37]<a Srinjoy Ray/>
+and 1 other connection like this
+[38]<button false;Open control menu for post by Gaurish Baliga/>
+[39]<button Dismiss post by Gaurish Baliga/>
+[40]<a View Gaurish Baliga’s  graphic link/>
+[41]<img />
+[42]<a View: Gaurish Baliga • 1st Avid Learner | Winter Intern @Rubrik | SWE Intern ‘24 @Google | Master @Codeforces | 6⭐@CodeChef | ICPC Asia West Finalist>Gaurish Baliga
+Gaurish Baliga
+• 1st
+1st
+Avid Learner | Winter Intern @Rubrik | SWE Intern ‘24 @Google | Master @Codeforces | 6⭐@CodeChef | ICPC Asia West Finalist
+Avid Learner | Winter Intern @Rubrik | SWE Intern ‘24 @Google | Master @Codeforces | 6⭐@CodeChef | ICPC Asia West Finalist/>
+13h • Edited •
+13 hours ago • Edited • Visible to anyone on or off LinkedIn
+[43]<div 𝐈𝐧𝐝𝐢𝐚'𝐬 𝐓𝐨𝐩 𝐂𝐨𝐝𝐞𝐫𝐬, 𝐀𝐥𝐥 𝐢𝐧 𝐎𝐧𝐞 𝐅𝐫𝐚𝐦𝐞
+Hey Connections,
+I'm excited to share that we just wrapped up 𝐈𝐈𝐂𝐏𝐂 𝐂𝐨𝐝𝐞𝐟𝐞𝐬𝐭 2025, and the scale we reached exceeded our expectations.
+The competition began with our preliminary round that drew around 50,000 participants worldwide. From there, the top 400 advanced to the Regionals, hosted across 8 IITs. To put this in perspective, top 400 people at Codeforces are 1800+ rated in India.
+Our finals brought together the top 50 competitors for an intense 3-hour challenge that concluded our 3-month journey. The atmosphere was electric as we watched these exceptional programmers tackle extremely hard algorithmic problems.
+Congratulations to our winners:
+1.⁠ ⁠𝐒𝐡𝐫𝐞𝐲𝐚𝐧 𝐑𝐚𝐲 (𝐈𝐆𝐌 𝐂𝐨𝐝𝐞𝐟𝐨𝐫𝐜𝐞𝐬, 𝐈𝐧𝐝𝐢𝐚 #1)
+2.⁠ ⁠𝐂𝐡𝐚𝐡𝐞𝐥 𝐒𝐢𝐧𝐠𝐡 (𝐌𝐚𝐬𝐭𝐞𝐫 𝐂𝐨𝐝𝐞𝐟𝐨𝐫𝐜𝐞𝐬)
+3.⁠ ⁠𝐌𝐫𝐢𝐝𝐮𝐥 𝐀𝐡𝐢 (𝐆𝐌 𝐂𝐨𝐝𝐞𝐟𝐨𝐫𝐜𝐞𝐬)
+A sincere thank you to our sponsors who made this event possible:
+Their support extended beyond funding to engagement throughout the event, and they provided memorable gifts for all finalists and organizers.
+I want to acknowledge our organizing team's dedication, with special thanks to
+whose leadership was instrumental in making this happen. We're committed to continuing to strengthen the competitive programming community in India through thoughtful online and offline events.
+Regards,/>
+[44]<a Hudson River Trading/>
+[45]<a Citadel Securities/>
+[46]<a Jump Trading Group/>
+[47]<a Jane Street/>
+[48]<a The D. E. Shaw Group/>
+[49]<a Landeed | YC/>
+[50]<a />
+[51]<a Ayush Kumar/>
+[52]<a IICPC(InterCollegiate Informatic and Competitive Programming Camp Pvt Ltd)/>
+[53]<button see more, visually reveals content which is already detected by screen readers>…more/>
+[54]<button Activate to view larger image, No alternative text description for this image +2 images/>
+[55]<img />
+[56]<button Activate to view larger image, No alternative text description for this image +2 images/>
+[57]<img />
+[58]<button Activate to view larger image, No alternative text description for this image +2 images/>
+[59]<img />
+[60]<button Activate to view larger image, No alternative text description for this image +2 images>+2/>
+Activate to view larger image,
+[61]<button 2,233 reactions>2,233/>
+[62]<img />
+[63]<img />
+[64]<img />
+[65]<button 21 comments on {:actorName}{:actorName} post>21 comments/>
+[66]<button 2 reposts of {:actorName}{:actorName} post>2 reposts/>
+[67]<button React Like>Like/>
+[68]<button Comment/>
+[69]<button ;false>Repost/>
+[70]<button Send in a private message>Send/>
+Skip to LinkedIn News
+Feed post number 2
+[71]<a />
+[72]<img />
+[73]<a Kamal Pratap Singh/>
+and 1 other connection follow
+[74]<a Dr. Nitnem @ Apollo Clinic Lucknow/>
+[75]<a Dr. Nitnem @ Apollo Clinic Lucknow, graphic./>
+[76]<img />
+[77]<a View: Dr. Nitnem @ Apollo Clinic Lucknow 427 followers>Dr. Nitnem @ Apollo Clinic Lucknow
+Dr. Nitnem @ Apollo Clinic Lucknow
+427 followers
+427 followers/>
+Promoted
+Promoted
+[78]<button Follow Dr. Nitnem @ Apollo Clinic Lucknow>Follow/>
+[79]<div If you or anyone you know is suffering from any mental health problem - from common stress to rare disorders, feel free to contact us for help. We also provide counseling/therapy for couples (married as well as unmarried)./>
+[80]<button see more, visually reveals content which is already detected by screen readers>…more/>
+[81]<a View sponsored page/>
+[82]<img />
+[83]<a View sponsored page/>
+[84]<a View sponsored page/>
+[85]<img />
+[86]<a View sponsored page/>
+[87]<button Navigate to next item/>
+... 3595 pixels below - scroll or extract content to see more ...
+Current step: 2/100Current date and time: 2025-04-07 11:43
+
+ RESPONSE
+{
+  "current_state": {
+    "evaluation_previous_goal": "Success - Navigated to linkedin.com",
+    "memory": "Navigated to linkedin.com. 0 profiles collected. Need to collect 20 profiles from my connections.",
+    "next_goal": "Click on 'My Network' to view connections"
+  },
+  "action": [
+    {
+      "click_element": {
+        "index": 3
+      }
+    }
+  ]
+}
