@@ -104,16 +104,16 @@ After running the script, you'll get a `linkedin_connections.json` file like:
 - **Loop Prevention**: Set max iteration safeguards and tracked redundant actions to detect when the agent gets stuck.
 - **Headless vs Headed Mode**: During debugging, headed mode (`highlight_elements=True`) helped visualize the agent’s behavior.
 
-### ✅ Optimizations Implemented
+### ✅ Next Step: Optimizations Implimentation
 
-- Used `ConversationTokenBufferMemory` to retain relevant info within the token budget.
-- Filtered irrelevant DOM nodes to reduce context bloat.
-- Cached browser sessions to reduce login frequency.
-- Reloaded stale pages and context periodically.
+- Use `ConversationTokenBufferMemory` to retain relevant info within the token budget.
+- Filter irrelevant DOM nodes to reduce context bloat.
+- Cache browser sessions to reduce login frequency.
+- Reload stale pages and context periodically.
 
 ---
 
-## 📂 Output & Caching
+## 📂 Output
 
 - Scraped data is stored in `linkedin_connections.json`.
 - Session logs are saved in the `logs/conversation/` folder.
